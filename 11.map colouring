@@ -1,0 +1,66 @@
+class CSP:
+    def __init__(self, variables, domains, neighbors, constraints):
+        self.variables = variables
+        self.domains = domains
+        self.neighbors = neighbors
+        self.constraints = constraints
+        self.assignments = {}
+
+    def is_consistent(self, var, value):
+        for neighbor in self.neighbors[var]:
+            if neighbor in self.assignments and not self.constraints(var, value, neighbor, self.assignments[neighbor]):
+                return False
+        return True
+
+    def backtrack(self):
+        if len(self.assignments) == len(self.variables):
+            return self.assignments
+
+        unassigned = [v for v in self.variables if v not in self.assignments]
+        first = unassigned[0]
+
+        for value in self.domains[first]:
+            if self.is_consistent(first, value):
+                self.assignments[first] = value
+                result = self.backtrack()
+                if result:
+                    return result
+                self.assignments.pop(first)
+
+        return None
+
+
+def map_coloring():
+    variables = ['WA', 'NT', 'SA', 'Q', 'NSW', 'V', 'T']
+    domains = {
+        'WA': ['Red', 'Green', 'Blue'],
+        'NT': ['Red', 'Green', 'Blue'],
+        'SA': ['Red', 'Green', 'Blue'],
+        'Q': ['Red', 'Green', 'Blue'],
+        'NSW': ['Red', 'Green', 'Blue'],
+        'V': ['Red', 'Green', 'Blue'],
+        'T': ['Red', 'Green', 'Blue']
+    }
+    neighbors = {
+        'WA': ['NT', 'SA'],
+        'NT': ['WA', 'SA', 'Q'],
+        'SA': ['WA', 'NT', 'Q', 'NSW', 'V'],
+        'Q': ['NT', 'SA', 'NSW'],
+        'NSW': ['Q', 'SA', 'V'],
+        'V': ['SA', 'NSW'],
+        'T': []
+    }
+
+    def constraints(var1, value1, var2, value2):
+        return value1 != value2
+
+    csp = CSP(variables, domains, neighbors, constraints)
+    solution = csp.backtrack()
+    return solution
+
+
+if __name__ == "__main__":
+    solution = map_coloring()
+    print("Solution to the map coloring problem:")
+    for state, color in solution.items():
+        print(f"{state}: {color}")
