@@ -1,0 +1,21 @@
+% Define a person with name and date of birth
+person('John Doe', '1980-01-15').
+person('Jane Smith', '1990-02-20').
+person('Alice Johnson', '1985-03-25').
+person('Bob Brown', '1975-04-10').
+
+% Query examples:
+% To find the DOB of a specific person:
+% ?- person('John Doe', DOB).
+% DOB = '1980-01-15'.
+
+% To find all people with their DOBs:
+% ?- person(Name, DOB).
+% Name = 'John Doe',
+% DOB = '1980-01-15' ;
+% Name = 'Jane Smith',
+% DOB = '1990-02-20' ;
+% Name = 'Alice Johnson',
+% DOB = '1985-03-25' ;
+% Name = 'Bob Brown',
+% DOB = '1975-04-10'.
